@@ -1,0 +1,35 @@
+name: Build Blazor app and deploy to Github Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: 
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          
+      - name: Publish
+        run: |
+          cd joey-rieg.github.io
+          dotnet publish -c Release -o release
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: joey-rieg.github.io/release/wwwroot/
+          
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish to GitHub Pages
+        uses: actions/deploy-pages@v4
+        
