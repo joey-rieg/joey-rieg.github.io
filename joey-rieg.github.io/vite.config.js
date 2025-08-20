@@ -11,7 +11,7 @@ export default defineConfig({
         outDir: resolve(__dirname, 'wwwroot/js'),
         emptyOutDir: true,
         rollupOptions: {
-            input: resolve(__dirname, 'frontend/main.js'),
+            input: resolve(__dirname, 'Frontend/main.js'),
             output: {
                 entryFileNames: `main.js`,   // force plain name
                 chunkFileNames: `chunks/[name].js`,
