@@ -1,77 +1,57 @@
-import * as THREE from 'three';
-import {time} from "three/src/Three.TSL";
+import * as THREE from "three";
+window._threeScenes = new Map();
 
-window.initShaderGradient = () => {
-    const container = document.getElementById('three-container');
+window.initThree = function(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
 
-    const clock = new THREE.Clock();
     const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(- 1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
+    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
-    let mouse = { x: 0.5, y: 0.5 }; // normalized coordinates (0–1)
-    window.addEventListener("mousemove", (e) => {
-        mouse.x = e.clientX / window.innerWidth;
-        mouse.y = 1 - e.clientY / window.innerHeight; // flip y for shader
-    });
-    
-    const material = new THREE.ShaderMaterial({
-       uniforms: {
-           u_time: { value: 0.0 },
-           u_mouse: { value: new THREE.Vector2(mouse.x, mouse.y) },
-           u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-           u_aspect: { value: window.innerWidth / window.innerHeight }
-       },
-        vertexShader: `
-            void main() {
-                gl_Position = vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            uniform float u_time;
-            uniform vec2 u_resolution;
-            uniform vec2 u_mouse;
-            uniform float u_aspect;
-            
-            void main() {
-                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-                
-                vec2 diff = uv - u_mouse;
-                diff.x *= u_aspect;  // aspect correction
-            
-                float dist = length(diff);
-                float blob = smoothstep(0.2, 0.0, dist);
-            
-                vec3 color = mix(vec3(0.0, 0.0, 0.1), vec3(0.2, 0.6, 1.0), blob);
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `
-    });
-    
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    _threeScenes.set(canvasId, { renderer, camera, scene });
 
-    const resize = () =>
-    {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        material.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
-        material.uniforms.u_aspect.value = (window.innerWidth / window.innerHeight);
-    }
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-    window.addEventListener('resize', resize);
-    resize(); // Initial resize
-    
+    camera.position.z = 5;
+
     function animate() {
         requestAnimationFrame(animate);
-
-        material.uniforms.u_time.value = clock.getElapsedTime();
-        material.uniforms.u_mouse.value.set(mouse.x, mouse.y);
-
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
         renderer.render(scene, camera);
     }
-    
-    animate(time);
+
+    animate();
 };
+
+window.resizeThree = function(canvasId) {
+    const entry = _threeScenes.get(canvasId);
+    if (!entry) return;
+
+    const { renderer, camera } = entry;
+    const canvas = document.getElementById(canvasId);
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+};
+
+window.themeManager = {
+    toggleTheme: function () {
+        document.documentElement.classList.toggle("light-theme");
+        localStorage.setItem("theme", document.body.classList.contains("light-theme") ? "light" : "dark");
+    },
+
+    initTheme: function () {
+        const saved = localStorage.getItem("theme") || "dark";
+        if (saved === "light") {
+            document.documentElement.classList.add("light-theme");
+        } else {
+            document.documentElement.classList.remove("light-theme");
+        }
+    }
+}

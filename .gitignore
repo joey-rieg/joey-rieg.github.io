@@ -71,6 +71,9 @@ dist/
 .idea/**/dictionaries
 .idea/**/shelf
 
+*.DotSettings.user
+
+
 # AWS User-specific
 .idea/**/aws.xml
 

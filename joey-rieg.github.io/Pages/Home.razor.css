@@ -1,0 +1,5 @@
+.panels {
+    display: flex;
+    flex: 1;
+    box-shadow: #1a1d20 3px 12px 30px;
+}

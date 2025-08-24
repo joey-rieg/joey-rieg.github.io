@@ -2498,4 +2498,10 @@
       <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\images\img1.jpg" />
+      <None Include="wwwroot\images\img2.jpg" />
+      <None Include="wwwroot\images\img3.jpg" />
+    </ItemGroup>
+
 </Project>

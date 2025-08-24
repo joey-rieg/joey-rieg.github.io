@@ -1,27 +1,12 @@
 ﻿@page "/"
+@using joey_rieg.github.io.Components
 @inject IJSRuntime JsRuntime
 
 <PageTitle>Home</PageTitle>
 
-<div id="three-container"></div>
-
-<div class="vh-100 d-flex justify-content-center align-items-center overlay-text">
-    <div class="text-center">
-        <h1>Hey, I'm Joey</h1>
-        <h3>This will be a place for my work!</h3>
-    </div>
+<div class="panels">
+    <ImagePanel Title="Career" Description="This is what I do at work" ImageUrl="images/img1.webp" />
+    <ImagePanel Title="Photography" Description="I take photos" ImageUrl="images/img2.webp" />
+    <ImagePanel Title="Programming" Description="I type stuff that executes (most of the time)" ImageUrl="images/img3.webp" />
 </div>
 
-
-
-
-@code
-{
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JsRuntime.InvokeVoidAsync("initShaderGradient");
-        }
-    }
-}
