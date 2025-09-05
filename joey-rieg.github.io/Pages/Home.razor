@@ -1,12 +1,16 @@
 ﻿@page "/"
-@using joey_rieg.github.io.Components
-@inject IJSRuntime JsRuntime
+@inject IJSRuntime JS
 
-<PageTitle>Home</PageTitle>
+<canvas class="@CanvasId">
+    
+</canvas>
 
-<div class="panels">
-    <ImagePanel Title="Career" Description="This is what I do at work" ImageUrl="images/img1.webp" />
-    <ImagePanel Title="Photography" Description="I take photos" ImageUrl="images/img2.webp" />
-    <ImagePanel Title="Programming" Description="I type stuff that executes (most of the time)" ImageUrl="images/img3.webp" />
-</div>
+@code
+{
+    private const string CanvasId = "fullscreen-canvas";
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("initThree", CanvasId);
+    }
+}
