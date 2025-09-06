@@ -1,16 +1,16 @@
 ﻿@page "/"
 @inject IJSRuntime JS
 
-<canvas class="@CanvasId">
-    
-</canvas>
+<div class="@CanvasId"></div>
 
-@code
-{
+@code {
     private const string CanvasId = "fullscreen-canvas";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JS.InvokeVoidAsync("initThree", CanvasId);
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initThree", CanvasId);
+        }
     }
 }
