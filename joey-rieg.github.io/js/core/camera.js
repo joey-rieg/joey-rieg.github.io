@@ -8,7 +8,7 @@ export function createCamera() {
         1000
     );
 
-    camera.position.set( 0, 1, 5);
+    camera.position.set( 0, 2, 5);
 
     return camera;
 }

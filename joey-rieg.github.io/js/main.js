@@ -6,7 +6,11 @@ import {createLights} from './core/lights';
 import {initHubScene} from "./scenes/hubScene";
 import {animate} from "./core/animationLoop";
 
-window.initThree = async function(canvasId) {
+// Will be thrown out by tree shaking in production
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import {createSceneGUI} from './utils/gui';
+
+window.initThree = async function(canvasId, isDev) {
     const scene = new THREE.Scene();
     const camera = createCamera();
     const renderer = await createRenderer(canvasId);
@@ -15,6 +19,13 @@ window.initThree = async function(canvasId) {
     scene.add(new THREE.GridHelper(10, 10, 0x404040));
     
     const controls = configureControls(camera, renderer.domElement);
+    
+    // Add Helper UI only in dev environment
+    console.log("Is Dev: " + isDev);
+    if (isDev) {
+        const gui = new GUI();
+        createSceneGUI(scene, gui);
+    }
     
     animate(renderer, camera, controls, scene);
 

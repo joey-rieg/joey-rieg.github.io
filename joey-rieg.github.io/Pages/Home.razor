@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inject IWebAssemblyHostEnvironment HostEnvironment
 @inject IJSRuntime JS
 
 <div class="@CanvasId"></div>
@@ -10,7 +12,8 @@
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("initThree", CanvasId);
+            var isDev = HostEnvironment.IsDevelopment();
+            await JS.InvokeVoidAsync("initThree", CanvasId, isDev);
         }
     }
 }
