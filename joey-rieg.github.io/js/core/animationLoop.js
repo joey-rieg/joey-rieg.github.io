@@ -27,7 +27,7 @@ window.addEventListener('keyup', (e) => {
         case 'KeyE': move.up = false; break;
     }
 });
-export function animate(renderer, camera, controls, scene) {
+export function animate(renderer, camera, controls, scene, postProcessing) {
     renderer.setAnimationLoop(() => {
         const time = performance.now();
         const delta = (time - prevTime) / 1000; // seconds
@@ -48,6 +48,6 @@ export function animate(renderer, camera, controls, scene) {
             controls.moveForward(velocity.z);
         }
         
-        renderer.render(scene, camera);
+        postProcessing.render();
     });
 }

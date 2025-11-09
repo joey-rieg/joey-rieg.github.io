@@ -2,7 +2,7 @@ import * as THREE from "three/webgpu";
 
 export function createCamera() {
     const camera = new THREE.PerspectiveCamera(
-        75,
+        60,
         window.innerWidth / window.innerHeight,
         0.1,
         1000

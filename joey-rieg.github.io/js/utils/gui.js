@@ -33,9 +33,17 @@ export function createSceneGUI(object, gui) {
                 addMaterialControls(subMaterialFolder, mat);
             });
         }
+        
+        folder.open(false);
+    }
+    
+    // 3. Add light properties
+    if (object instanceof THREE.Light) {
+        const lightFolder = folder.addFolder('Light');
+        addLightControls(lightFolder, object);
     }
 
-    // 3. Recursively call this function for all children
+    // 4. Recursively call this function for all children
     object.children.forEach(child => {
         createSceneGUI(child, folder); // Pass the current folder as the new parent GUI
     });
@@ -46,24 +54,21 @@ function addMaterialControls(guiFolder, material) {
     guiFolder.addColor({ color: '#' + material.color.getHexString() }, 'color')
         .onChange(value => material.color.set(value));
 
-    // Add roughness/metalness if it's a PBR material
-    if ('roughness' in material) {
-        guiFolder.add(material, 'roughness', 0, 1);
+
+    if ('emissive' in material){
+        guiFolder.addColor({ emissive: '#' + material.emissive.getHexString() }, 'emissive')
+            .onChange(value => material.emissive.set(value));
     }
-    if ('metalness' in material) {
-        guiFolder.add(material, 'metalness', 0, 1);
-    }
+    
+    if ('anisotropy' in material) guiFolder.add(material, 'anisotropy', 0, 1);
+    if ('roughness' in material) guiFolder.add(material, 'roughness', 0, 1);
+    if ('metalness' in material) guiFolder.add(material, 'metalness', 0, 1);
+    
     guiFolder.add(material, 'wireframe');
 }
 
-
-// --- Usage ---
-
-// main.js
-// const gui = new GUI();
-// const scene = new THREE.Scene();
-
-// ... add your objects, lights, etc. to the scene ...
-
-// Call the function on your main scene object
-// createSceneGUI(scene, gui);
+function addLightControls(guiFolder, light) {
+    guiFolder.addColor({color: '#' + light.color.getHexString() }, 'color')
+        .onChange(value => light.color.set(value));
+    guiFolder.add(light, 'intensity', 0, 1000);
+}
