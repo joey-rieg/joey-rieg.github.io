@@ -1,13 +1,11 @@
 import * as THREE from "three/webgpu";
 
-export function createPedestal(position, id) {
-    const pedestalColor = 0x4b5320;
-    const glowColor = 0xe8ff66;
+export function createPedestal(position, color, glowColor, id) {
     // Pedestal base
     const height = 0.5;
     const geometry = new THREE.CylinderGeometry(0.6, 0.8, height);
     const material = new THREE.MeshStandardMaterial({
-        color: pedestalColor,
+        color: color,
         metalness: 0.9,
         roughness: 0.5,
     });

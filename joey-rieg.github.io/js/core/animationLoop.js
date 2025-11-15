@@ -48,6 +48,8 @@ export function animate(renderer, camera, controls, scene, postProcessing) {
             controls.moveForward(velocity.z);
         }
         
+        scene.traverse(obj => obj.update?.(delta));
+        
         postProcessing.render();
     });
 }

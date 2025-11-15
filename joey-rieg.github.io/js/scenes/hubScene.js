@@ -7,11 +7,32 @@ const PEDESTAL_SPACING = 3;
 
 export function initHubScene(scene) {
     let hubGroup = new THREE.Group();
+    
+    // Pedestals
+    const color = 0x4b5320;
+    const glowColor = 0xe8ff66;
     for (let i = 0; i < NUM_PEDESTALS; i++) {
-        //let pedestal = createPedestal(i, NUM_PEDESTALS, PEDESTAL_SPACING);
         const pedestalPosition = getPedestalPosition(i, NUM_PEDESTALS, PEDESTAL_SPACING);
-        const pedestal = createPedestal(pedestalPosition, i);
+        const pedestal = createPedestal(pedestalPosition, color, glowColor, i);
+        
+        const artifactGeometry = new THREE.BoxGeometry(0.5, 0.5,0.5);
+        const artifactMaterial = new THREE.MeshStandardMaterial({
+            emissive: glowColor,
+            emissiveIntensity: 0.5,
+            metalness: 0.8,
+            roughness: 0.5,
+        })
+        
+        const artifact = new THREE.Mesh(artifactGeometry, artifactMaterial);
+        artifact.name = 'Artifact-' + i;
+        artifact.position.copy(pedestal.position);
+        artifact.position.y = 2;
+        artifact.rotation.x = Math.PI / 3 * i;
+        
+        artifact.update = (dt) => artifact.rotation.x += dt;
+        
         hubGroup.add(pedestal);
+        hubGroup.add(artifact);
     }
     
     hubGroup.add(createFloor());
