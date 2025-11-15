@@ -2,9 +2,9 @@ import * as THREE from 'three/webgpu';
 import {pass} from "three/src/Three.TSL";
 import {bloom} from "three/addons/tsl/display/BloomNode"
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-import {createRenderer} from './core/renderer';
-import {createCamera} from './core/camera';
-import {createLights} from './core/lights';
+import {createRenderer} from './components/renderer';
+import {createCamera} from './components/camera';
+import {createLights} from './components/lights';
 import {initHubScene} from "./scenes/hubScene";
 import {animate} from "./core/animationLoop";
 

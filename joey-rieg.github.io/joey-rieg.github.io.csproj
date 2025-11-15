@@ -2499,10 +2499,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Include="wwwroot\images\img1.jpg" />
       <None Include="wwwroot\images\img2.jpg" />
       <None Include="wwwroot\images\img3.jpg" />
