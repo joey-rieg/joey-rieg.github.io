@@ -8,6 +8,7 @@ import {createLights} from './components/lights';
 import {initHubScene} from "./scenes/hubScene";
 import {animate} from "./core/animationLoop";
 import {InteractionManager} from "./core/interactionManager";
+import {Controls} from './utils/controls';
 
 // Will be thrown out by tree shaking in production
 import {GUI} from 'three/examples/jsm/libs/lil-gui.module.min.js';
@@ -31,7 +32,7 @@ window.initThree = async function (canvasId, isDev) {
     postProcessing.outputNode = scenePassColor.add(bloomPass);
 
     // Setup controls
-    const controls = configureControls(camera, renderer.domElement);
+    const controls = new Controls(camera, renderer.domElement)
 
     // Setup interactions
     const interactionManager = new InteractionManager(camera, renderer);
@@ -45,26 +46,13 @@ window.initThree = async function (canvasId, isDev) {
 
     animate(renderer, camera, controls, scene, postProcessing, interactionManager);
 
-    setupResize(renderer, camera, controls);
+    setupResize(renderer, camera);
 }
 
-function setupResize(renderer, camera, controls) {
+function setupResize(renderer, camera) {
     window.addEventListener('resize', () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
     });
-}
-
-function configureControls(camera, domElement) {
-    let controls = new PointerLockControls(camera, domElement);
-    controls.isLocked = true;
-
-    window.addEventListener('keydown', (event) => {
-        if (event.code === 'KeyP') {
-            controls.lock();
-        }
-    });
-
-    return controls;
 }

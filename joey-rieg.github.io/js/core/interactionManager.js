@@ -8,7 +8,7 @@ export class InteractionManager {
         this.interactiveObjects = [];
         this.hoveredObject = null;
         
-        window.addEventListener('mouseMove', this.#onPointerMove.bind(this), false);
+        window.addEventListener('mousemove', this.#onPointerMove.bind(this), false);
         window.addEventListener('click', this.#onClick.bind(this), false);
     }
 
@@ -75,8 +75,8 @@ export class InteractionManager {
     }
     
     #onPointerMove(event) {
-        this.pointer.x = (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1;
-        this.pointer.y = (event.clientY / this.renderer.domElement.clientHeight) * 2 - 1;
+        this.pointer.x =  (event.clientX / window.innerWidth) * 2 - 1;
+        this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
     }
     
     #onClick(event)
