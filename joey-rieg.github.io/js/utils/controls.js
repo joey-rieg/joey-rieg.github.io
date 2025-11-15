@@ -49,7 +49,7 @@ export class Controls {
         });
     }
     
-    update(delta, scene) {
+    update(delta) {
         if (this.#controls.isLocked) { // Move only when the pointer is locked
             this.velocity.set(0, 0, 0);
 

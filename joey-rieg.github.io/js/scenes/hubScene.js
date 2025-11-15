@@ -17,6 +17,14 @@ export function initHubScene(scene) {
         const pedestalPosition = getPedestalPosition(i, NUM_PEDESTALS, PEDESTAL_SPACING);
         const pedestal = createPedestal(pedestalPosition, color, glowColor, i);
         
+        const hoverHitBoxGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2);
+        const hoverHitBoxMaterial = new THREE.MeshBasicMaterial({visible: false});
+        const hoverHitBox = new THREE.Mesh(hoverHitBoxGeometry, hoverHitBoxMaterial);
+        hoverHitBox.name = 'HitBox-' + i;
+        hoverHitBox.position.copy(pedestal.position);
+        hoverHitBox.position.y = 1.8;
+        
+        
         const artifactGeometry = new THREE.BoxGeometry(0.5, 0.5,0.5);
         const artifactMaterial = new THREE.MeshStandardMaterial({
             emissive: glowColor,
@@ -33,12 +41,21 @@ export function initHubScene(scene) {
         
         //artifact.update = (dt) => artifact.rotation.x += dt;
         makeInteractive(
-            artifact, {
-            onHoverIn: () => gsap.to(artifact.scale, {x: 0.7, y: 0.7, z:0.7, duration: 0.25}),
-            onHoverOut: () => gsap.to(artifact.scale, {x: 0.5, y: 0.5, z:0.5, duration: 0.25}),
+            hoverHitBox, {
+            onHoverIn: () => {
+                gsap.to(artifact.position, {y: 2.5, duration: 0.25});
+                gsap.to(artifact.rotation, {x: toRadians(15), y: toRadians(20), z: 0, duration: 0.25});
+                gsap.to(artifact.scale, {x: 1.15, y: 1.15, z: 1.15, duration: 0.25});
+            },
+            onHoverOut: () => {
+                gsap.to(artifact.position, {y: 2, duration: 0.25});
+                gsap.to(artifact.rotation, {x: 0, y: 0, z: 0, duration: 0.25});
+                gsap.to(artifact.scale, {x: 1, y: 1, z: 1, duration: 0.25});
+            },
             onClick: () => console.log('clicked')
         });
         
+        hubGroup.add(hoverHitBox);
         hubGroup.add(pedestal);
         hubGroup.add(artifact);
     }
@@ -78,3 +95,5 @@ function getPedestalPosition(id, numPedestals, spacing)
 {
     return new THREE.Vector3((id - (numPedestals-1)/2.0) * spacing, 1, 0);
 }
+
+function toRadians(degrees) { return degrees * Math.PI / 180 }
