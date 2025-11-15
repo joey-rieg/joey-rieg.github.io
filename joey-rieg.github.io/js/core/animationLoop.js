@@ -27,13 +27,13 @@ window.addEventListener('keyup', (e) => {
         case 'KeyE': move.up = false; break;
     }
 });
-export function animate(renderer, camera, controls, scene, postProcessing) {
+export function animate(renderer, camera, controls, scene, postProcessing, interactionManager) {
     renderer.setAnimationLoop(() => {
         const time = performance.now();
         const delta = (time - prevTime) / 1000; // seconds
         prevTime = time;
 
-        if (controls.isLocked) { // Move only when pointer is locked
+        if (controls.isLocked) { // Move only when the pointer is locked
             velocity.set(0, 0, 0);
 
             if (move.forward) velocity.z += speed * delta;
@@ -48,6 +48,7 @@ export function animate(renderer, camera, controls, scene, postProcessing) {
             controls.moveForward(velocity.z);
         }
         
+        interactionManager.update();
         scene.traverse(obj => obj.update?.(delta));
         
         postProcessing.render();

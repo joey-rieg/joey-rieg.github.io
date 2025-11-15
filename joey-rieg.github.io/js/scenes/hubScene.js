@@ -1,6 +1,8 @@
 import * as THREE from 'three/webgpu';
+import {gsap} from 'gsap';
 import {createPedestal} from '../components/pedestal';
 import {createFloor} from '../components/floor';
+import {makeInteractive} from "../utils/interactionUtils";
 
 const NUM_PEDESTALS = 3;
 const PEDESTAL_SPACING = 3;
@@ -29,7 +31,13 @@ export function initHubScene(scene) {
         artifact.position.y = 2;
         artifact.rotation.x = Math.PI / 3 * i;
         
-        artifact.update = (dt) => artifact.rotation.x += dt;
+        //artifact.update = (dt) => artifact.rotation.x += dt;
+        makeInteractive(
+            artifact, {
+            onHoverIn: () => gsap.to(artifact.scale, {x: 0.7, y: 0.7, z:0.7, duration: 0.25}),
+            onHoverOut: () => gsap.to(artifact.scale, {x: 0.5, y: 0.5, z:0.5, duration: 0.25}),
+            onClick: () => console.log('clicked')
+        });
         
         hubGroup.add(pedestal);
         hubGroup.add(artifact);

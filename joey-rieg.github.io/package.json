@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/joey-rieg/joey-rieg.github.io#readme",
   "dependencies": {
+    "gsap": "^3.13.0",
     "three": "^0.179.1"
   },
   "devDependencies": {
