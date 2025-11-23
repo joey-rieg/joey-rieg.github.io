@@ -1,6 +1,6 @@
 import * as THREE from "three/webgpu";
 
-export function createCamera() {
+export function createCamera(position) {
     const camera = new THREE.PerspectiveCamera(
         60,
         window.innerWidth / window.innerHeight,
@@ -8,7 +8,7 @@ export function createCamera() {
         1000
     );
 
-    camera.position.set( 0, 2, 5);
+    camera.position.copy(position);
 
     return camera;
 }

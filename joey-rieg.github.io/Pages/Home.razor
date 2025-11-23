@@ -13,7 +13,9 @@
         if (firstRender)
         {
             var isDev = HostEnvironment.IsDevelopment();
-            await JS.InvokeVoidAsync("initThree", CanvasId, isDev);
+            var jsId = isDev ? "initThree" : "initComingSoon";
+            jsId = "initComingSoon";
+            await JS.InvokeVoidAsync(jsId, CanvasId, isDev);
         }
     }
 }

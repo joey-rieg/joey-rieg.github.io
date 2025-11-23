@@ -1,15 +1,22 @@
-let prevTime = performance.now();
+import * as THREE from "three";
+import {updatePhysicSync} from "./physicsSyncManager";
 
-export function animate(renderer, camera, controls, scene, postProcessing, interactionManager) {
+const clock = new THREE.Clock();
+
+export function animate(renderer, camera, scene, postProcessing, interactionManager, world = null, controls = null) {
     renderer.setAnimationLoop(() => {
-        const time = performance.now();
-        const delta = (time - prevTime) / 1000; // seconds
-        prevTime = time;
-        
-        if (controls.isEnabled) {
+        const delta = clock.getDelta();
+
+        if (controls && controls.isEnabled) {
             controls.update(delta);
         }
         
+        if (world) {
+            world.step(1/60, delta, 3);
+
+            updatePhysicSync();
+        }
+            
         
         interactionManager.update();
         scene.traverse(obj => obj.update?.(delta));
