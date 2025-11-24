@@ -18,7 +18,7 @@ import * as CANNON from "cannon-es";
 window.initComingSoon = async function(canvasId, isDev)
 {
     const scene = new THREE.Scene();
-    const camera = createCamera(new THREE.Vector3(0,1,15));
+    const camera = createCamera(new THREE.Vector3(0,1,10));
     const renderer = await createRenderer(canvasId);
     renderer.setPixelRatio(window.devicePixelRatio);
     initComingSoonScene(scene, camera, renderer.domElement);

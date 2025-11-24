@@ -8,47 +8,53 @@ import {palette} from "../utils/colorPalette";
 
 const Resources = {font: undefined};
 const textGlowColor = palette.lightTeal;
-const targetText = "> This website is under construction ...";
+const targetText = "Under construction ...";
 const typingSpeed = 75; // milliseconds per character
 const additionalTextShift = 8;
 
-let textMesh;
 let initScene;
-let transformControls;
+let textMesh;
 let startTextPosition = new THREE.Vector3(); // Will be calculated dynamically
 let flicker = new Flicker();
 
-// Define the desired final center point in the scene
-const finalTextCenterPoint = new THREE.Vector3(0, 1.5, -4);
-// Define the text options we will use for the geometry
+// Text properties
+const finalTextCenterPoint = new THREE.Vector3(0, 1, 7.7);
 const textOptions = {
-    size: 0.2,
-    depth: 0.1,
+    size: 0.1,
+    depth: 0.001,
     bevelEnabled: true,
     bevelThickness: 0.05,
     bevelSize: 0.005,
     bevelOffset: 0,
     bevelSegments: 1,
+    
 };
+
+// Room properties
+const roomProperties = {
+    length: 20,
+    width: 15,
+    height: 5,
+    slabThickness: 1,
+    lightToWallOffset: 2
+}
+
+const lightProperties = {
+    tubeColor: new THREE.Color(palette.lightOrange),
+    lightsPerTube: 16,
+    tubeRadius: 0.05,
+    tubeIntensity: 0.1
+}
 export function initComingSoonScene(scene, camera, domElement, world) {
     initScene = scene;
     setupRoom();
     setupLighting();
-    setupGUI();
 
     //flicker.startFlicker();
     setupTypewriter(targetText, textGlowColor);
 }
 
-function setupGUI() {
-    const gui = new GUI();
-    }
-
 function setupRoom() {
-    const height = 5;
-    const thickness = 1;
-    const length = 10;
-    
     // Load textures
     const texLoader = new THREE.TextureLoader();
     const textures = {
@@ -64,40 +70,52 @@ function setupRoom() {
         texture.wrapT = THREE.RepeatWrapping;
         texture.generateMipmaps = true;
     });
-    
 
     const roomGroup = new THREE.Group();
     // Walls
-    const leftWall = createConcreteSlab(thickness, height, length, textures);
+    const leftWall = createConcreteSlab(
+        roomProperties.slabThickness,
+        roomProperties.height,
+        roomProperties.length, 
+        textures);
+    
     leftWall.receiveShadow = true;
     
     const rightWall = leftWall.clone();
     rightWall.receiveShadow = true;
     
     let pos = new THREE.Vector3(
-        length * 0.5 + thickness*0.5,
-        height * 0.5,
+        roomProperties.width * 0.5 + roomProperties.slabThickness*0.5,
+        roomProperties.height * 0.5,
         0);
     rightWall.position.copy(pos);
     pos.x *= -1;
     leftWall.position.copy(pos);
     
-    const backWall = leftWall.clone();
-    backWall.receiveShadow = true;
+    const backWall = createConcreteSlab(
+        roomProperties.width,
+        roomProperties.height,
+        roomProperties.slabThickness,
+        textures
+    );
     pos.x = 0;
-    pos.z = -length * 0.5;
+    backWall.receiveShadow = true;
+    pos.z = -roomProperties.length * 0.5;
     backWall.position.copy(pos);
-    backWall.rotation.y = -Math.PI/2;
     
-    // floor
-    const floor = createConcreteSlab(length, thickness, length, textures);
+    // Floor
+    const floor = createConcreteSlab(
+        roomProperties.width,
+        roomProperties.slabThickness,
+        roomProperties.length,
+        textures);
     floor.receiveShadow = true;
-    floor.position.y = -thickness * 0.5;
+    floor.position.y = -roomProperties.slabThickness * 0.5;
 
-    // ceiling
+    // Ceiling
     const ceiling = floor.clone();
     floor.receiveShadow = true;
-    ceiling.position.y = height + 0.5 * thickness;
+    ceiling.position.y = roomProperties.height + 0.5 * roomProperties.slabThickness;
     
     roomGroup.add(backWall);
     roomGroup.add(leftWall);
@@ -137,7 +155,6 @@ function setupTypewriter(text, textColor) {
         tempGeometry.computeBoundingBox();
         const fullTextWidth = tempGeometry.boundingBox.max.x - tempGeometry.boundingBox.min.x;
         tempGeometry.dispose(); // Clean up temporary geometry
-        
 
         // 2. Calculate the starting X position
         // Start X = Desired Center X - (Full Text Width / 2)
@@ -182,7 +199,7 @@ function updateText(text, textColor) {
         new THREE.MeshStandardMaterial({
             color: palette.lightTeal,
             emissive: textColor,
-            emissiveIntensity: 0.3,
+            emissiveIntensity: 0.2,
             metalness: 0,
             roughness: 1,
         })
@@ -196,23 +213,41 @@ function updateText(text, textColor) {
 }
 
 function setupLighting() {
-    const lightColor = new THREE.Color(palette.lightOrange);
-    const height = 2;
-    const tubeRadius = 0.01;
-    const intensity = 0.3;
-    const tubePosition = new THREE.Vector3(3,height * 0.5, -3);
-    
-    const ceilingWidth = 10;
-    const ceilingHeight = 5;
-    const ceilingDepth = 10;
-    
     const lightGroup = new THREE.Group();
     
-    setupTubeLights(lightGroup, ceilingHeight, ceilingWidth, ceilingDepth, tubeRadius, lightColor, intensity);
+    const textLightOffset = new THREE.Vector3(2, -0.7, 0);
+    setupTextLight(
+        lightGroup,
+        finalTextCenterPoint.clone().sub(textLightOffset),
+        finalTextCenterPoint.clone().add(textLightOffset),
+        palette.lightTeal,
+        0.2,
+        3);
+    
+    setupTubeLights(
+        lightGroup,
+        roomProperties.height,
+        roomProperties.width - 2 * roomProperties.lightToWallOffset,
+        roomProperties.length - 2 * roomProperties.lightToWallOffset,
+        lightProperties.tubeRadius,
+        lightProperties.tubeColor,
+        lightProperties.tubeIntensity);
     
     initScene.add(lightGroup);
 }
 
+function setupTextLight(lightGroup, start, end, lightColor, intensity, numLights) {
+    
+    const length = end.x - start.x;
+    const step = length / (numLights - 1);
+    
+    for (let i = 0; i < numLights; i++) {
+        const light = new THREE.PointLight(lightColor, intensity, 15);
+        light.position.set(start.x + i * step, start.y, start.z);
+        
+        lightGroup.add(light);
+    }
+}
 function setupTubeLights(lightGroup, ceilingHeight, roomWidth, roomDepth, tubeRadius, lightColor, intensity) {
     
     const tubeLeft = createTube(
@@ -221,13 +256,13 @@ function setupTubeLights(lightGroup, ceilingHeight, roomWidth, roomDepth, tubeRa
         lightColor,
         intensity);
     
+    addPointLightsAlongTube(tubeLeft, lightColor, intensity, roomDepth, lightProperties.lightsPerTube);
     tubeLeft.rotation.x = Math.PI / 2;
-    addPointLightsAlongTube(tubeLeft, lightColor, intensity, roomDepth, 4);
 
     const tubeRight = tubeLeft.clone();
     
     let ceilingSideLightPositions = new THREE.Vector3(
-        roomWidth*0.5 - 1,
+        roomWidth * 0.5,
         ceilingHeight - (tubeRadius * 2), 
         0);
     
@@ -237,17 +272,18 @@ function setupTubeLights(lightGroup, ceilingHeight, roomWidth, roomDepth, tubeRa
     
     const tubeHorizontal = createTube(
         tubeRadius,
-        roomWidth - 2,
+        roomWidth,
         lightColor,
         intensity);
     
-    addPointLightsAlongTube(tubeHorizontal, lightColor, intensity, roomWidth - 2, 4);
+    addPointLightsAlongTube(tubeHorizontal, lightColor, intensity, roomWidth, lightProperties.lightsPerTube);
+    tubeHorizontal.rotation.x = Math.PI / 2;
     tubeHorizontal.rotation.z = Math.PI / 2;
     
     const horizontalLightPosition = new THREE.Vector3(
         0,
         ceilingHeight - (tubeRadius * 2),
-        -roomDepth * 0.5 + 1
+        -roomDepth * 0.5
     );
     
     tubeHorizontal.position.copy(horizontalLightPosition);
@@ -263,24 +299,23 @@ function addPointLightsAlongTube(tubeMesh, color, baseIntensity, length, count) 
     const step = length / (count - 1);
 
     for (let i = 0; i < count; i++) {
-        const light = new THREE.PointLight(color, baseIntensity, 15);
-        // Position lights along the Z axis of the TUBE's local coordinate system
+        const light = new THREE.PointLight(color, baseIntensity, 50);
+        
         light.position.y = start + i * step;
+        light.position.z = 0.5;
 
-        // Add the light to the tube mesh so it moves with it
         tubeMesh.add(light);
     }
 }
 
 function createTube(radius, length, color, intensity) {
-    // Geometry for a cylinder (the "tube" shape)
     const geometry = new THREE.CylinderGeometry(radius, radius, length, 16);
 
     // Material with high emission
     const material = new THREE.MeshStandardMaterial({
-        color: 0x000000,          // Base color (can be black)
-        emissive: color,          // The glowing color
-        emissiveIntensity: intensity, // Visually bright emission
+        color: 0x000000,
+        emissive: color,
+        emissiveIntensity: intensity,
         metalness: 0,
         roughness: 0
     });
