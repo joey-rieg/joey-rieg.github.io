@@ -1,8 +1,6 @@
 name: Build Blazor app and deploy to Github Pages
 
 on:
-  pull_request:
-    branches: [bug/coming-soon-not-found]
   push:
     branches: [ main ]
   workflow_dispatch: 
