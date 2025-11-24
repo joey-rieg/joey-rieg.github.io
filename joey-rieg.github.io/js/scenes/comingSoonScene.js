@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
 import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry";
 import {Flicker} from "../utils/flicker";
-import {GUI} from "three/examples/jsm/libs/lil-gui.module.min.js";
 import {palette} from "../utils/colorPalette";
 
 
@@ -162,7 +161,6 @@ function setupTypewriter(text, textColor) {
         // Set fixed Y and Z positions
         startTextPosition.y = finalTextCenterPoint.y;
         startTextPosition.z = finalTextCenterPoint.z;
-        console.log(`Length ${fullTextWidth} . Pos: ${startTextPosition.x}`)
 
         // Start the typewriter effect
         typeWriterEffect(text, textColor);
