@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>joey-rieg.github.io</title>
-    <base href="/" />
-    <!-- Google Font: Sedgwick Ave Display -->
-    <link href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave+Display&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="stylesheet" href="css/blazor-general.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="joey-rieg.github.io.styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <script src="js/main.js"></script>
-    <script>
-        window.themeManager.initTheme();
-    </script>
-</head>
-
-<body>
-    <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
-    </div>
-
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="." class="reload">Reload</a>
-        <span class="dismiss">🗙</span>
-    </div>
-    <script src="_framework/blazor.webassembly.js"></script>
-</body>
-
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>joey-rieg.github.io</title>
+        <base href="/" />
+        <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/app.css" />
+        <link rel="stylesheet" href="css/blazor-general.css" />
+        <link rel="icon" type="image/png" href="favicon.png" />
+    </head>
+    
+    <body>
+        <div id="app">
+            <svg class="loading-progress">
+                <circle r="40%" cx="50%" cy="50%" />
+                <circle r="40%" cx="50%" cy="50%" />
+            </svg>
+            <div class="loading-progress-text"></div>
+        </div>
+    
+        <div id="blazor-error-ui">
+            An unhandled error has occurred.
+            <a href="." class="reload">Reload</a>
+            <span class="dismiss">🗙</span>
+        </div>
+        
+        <!-- Vite bundling -->
+        <script type="module" src="js/main.js"></script>
+        <!-- Blazor bootstrap -->
+        <script src="_framework/blazor.webassembly.js"></script>
+    </body>
 </html>

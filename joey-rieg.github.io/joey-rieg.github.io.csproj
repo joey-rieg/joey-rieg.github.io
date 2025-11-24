@@ -1387,6 +1387,10 @@
       <Content Include="node_modules\vite\package.json" />
       <Content Include="node_modules\vite\README.md" />
       <Content Include="node_modules\vite\types\package.json" />
+      <Content Update="js\three-initializer.js">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -2495,13 +2499,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\js\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Include="wwwroot\images\img1.jpg" />
       <None Include="wwwroot\images\img2.jpg" />
       <None Include="wwwroot\images\img3.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
     </ItemGroup>
 
 </Project>

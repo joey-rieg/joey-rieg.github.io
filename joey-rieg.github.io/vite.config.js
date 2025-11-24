@@ -1,22 +1,23 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
-    root: 'frontend',
+    root: '.', // project root
     build: {
         outDir: resolve(__dirname, 'wwwroot/js'),
         emptyOutDir: true,
         rollupOptions: {
-            input: resolve(__dirname, 'Frontend/main.js'),
+            input: resolve(__dirname, 'js/main.js'),
             output: {
-                entryFileNames: `main.js`,   // force plain name
-                chunkFileNames: `chunks/[name].js`,
-                assetFileNames: `assets/[name].[ext]`
-            }
-        }
-    }
+                entryFileNames: 'main.js',
+                chunkFileNames: 'chunks/[name].js',
+                assetFileNames: 'assets/[name].[ext]',
+            },
+        },
+    },
 });

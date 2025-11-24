@@ -1,26 +1,7 @@
-:root {
-    --bg-main-color: #2a2727;
-    --bg-accent-color: #4a4646;
-    --text-color: white;
-}
-
-:root.light-theme {
-    --bg-main-color: #ffffff;
-    --bg-accent-color: #dfdfdf;
-    --text-color: black;
-}
-
-html, body {
+html, body, main, #app {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
-    font-family: sans-serif;
-    color: var(--text-color);
-}
-
-.logo {
-    font-family: 'Sedgwick Ave Display', cursive;
-    font-size: 2rem;
 }
