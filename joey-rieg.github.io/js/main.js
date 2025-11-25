@@ -17,6 +17,13 @@ import * as CANNON from "cannon-es";
 
 window.initComingSoon = async function(canvasId, isDev)
 {
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) {
+        console.log("Couldn't request WebGPU Adapter");
+    }
+    else {
+        console.log(`Running WebGPU with ${adapter.info.architecture}`);
+    }
     const scene = new THREE.Scene();
     const camera = createCamera(new THREE.Vector3(0,1,10));
     const renderer = await createRenderer(canvasId);
