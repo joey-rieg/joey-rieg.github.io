@@ -151,7 +151,7 @@ fabric.properties
 .DS_Store
 
 # Compiled js files
-/wwwroot/js/
+**/wwwroot/js/
 
 # Vite
 .vite/
