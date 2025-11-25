@@ -20,7 +20,7 @@ export function animate(renderer, camera, scene, postProcessing, interactionMana
         interactionManager.update();
         scene.traverse(obj => obj.update?.(delta));
         
-        //postProcessing.render();
-        renderer.render(scene, camera);
+        postProcessing.render();
+        //renderer.render(scene, camera);
     });
 }
