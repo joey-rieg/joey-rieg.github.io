@@ -8,6 +8,7 @@ const __dirname = dirname(__filename);
 
 export default defineConfig({
     root: '.', // project root
+    base: '/js/', // base path from where main js is served publicly
     build: {
         outDir: resolve(__dirname, 'wwwroot/js'),
         emptyOutDir: true,

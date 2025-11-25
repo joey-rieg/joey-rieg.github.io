@@ -1,4 +1,4 @@
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 
 export function createLights() {
     let light = new THREE.SpotLight(0xffffff, .5, 5, Math.PI/2, .1,);

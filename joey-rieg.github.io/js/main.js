@@ -1,6 +1,4 @@
-import * as THREE from 'three/webgpu';
-import {pass} from "three/src/Three.TSL";
-import {bloom} from "three/addons/tsl/display/BloomNode"
+import * as THREE from 'three';
 import {createRenderer} from './components/renderer';
 import {createCamera} from './components/camera';
 import {createLights} from './components/lights';
@@ -8,12 +6,12 @@ import {initHubScene} from "./scenes/hubScene";
 import {initComingSoonScene} from "./scenes/comingSoonScene";
 import {animate} from "./core/animationLoop";
 import {InteractionManager} from "./core/interactionManager";
+import {initPostProcessing} from "./core/postProcessing";
 import {Controls} from './utils/controls';
 
 // Will be thrown out by tree shaking in production
 import {GUI} from 'three/examples/jsm/libs/lil-gui.module.min.js';
 import {createSceneGUI} from './utils/gui';
-import * as CANNON from "cannon-es";
 
 window.initComingSoon = async function(canvasId, isDev)
 {
@@ -23,16 +21,12 @@ window.initComingSoon = async function(canvasId, isDev)
     renderer.setPixelRatio(window.devicePixelRatio);
     initComingSoonScene(scene, camera, renderer.domElement);
     scene.background = new THREE.Color(0x000000);
-
+    
     // PostProcessing
-    const postProcessing = new THREE.PostProcessing(renderer);
-    const scenePass = pass(scene, camera);
-    const scenePassColor = scenePass.getTextureNode('output');
+    const postProcessing = await initPostProcessing(renderer, scene, camera); 
+    postProcessing.addBloom();
 
-    const bloomPass = bloom(scenePassColor);
-    postProcessing.outputNode = scenePassColor.add(bloomPass);
-
-    // Setup interactions
+    // Setup interactions   
     const interactionManager = new InteractionManager(camera, renderer);
     interactionManager.registerSceneObjects(scene);
 
@@ -51,12 +45,12 @@ window.initThree = async function (canvasId, isDev) {
     scene.background = new THREE.Color(0x000000);
 
     // PostProcessing
-    const postProcessing = new THREE.PostProcessing(renderer);
-    const scenePass = pass(scene, camera);
-    const scenePassColor = scenePass.getTextureNode('output');
-
-    const bloomPass = bloom(scenePassColor);
-    postProcessing.outputNode = scenePassColor.add(bloomPass);
+    // const postProcessing = new THREE.PostProcessing(renderer);
+    // const scenePass = pass(scene, camera);
+    // const scenePassColor = scenePass.getTextureNode('output');
+    //
+    // const bloomPass = bloom(scenePassColor);
+    // postProcessing.outputNode = scenePassColor.add(bloomPass);
 
     // Setup controls
     const controls = new Controls(camera, renderer.domElement)
