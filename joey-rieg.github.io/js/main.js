@@ -30,14 +30,15 @@ window.initComingSoon = async function(canvasId, isDev)
     renderer.setPixelRatio(window.devicePixelRatio);
     initComingSoonScene(scene, camera, renderer.domElement);
     scene.background = new THREE.Color(0x000000);
-
+    
+    const postProcessing = undefined;
     // PostProcessing
-    const postProcessing = new THREE.PostProcessing(renderer);
-    const scenePass = pass(scene, camera);
-    const scenePassColor = scenePass.getTextureNode('output');
-
-    const bloomPass = bloom(scenePassColor);
-    postProcessing.outputNode = scenePassColor.add(bloomPass);
+    // const postProcessing = new THREE.PostProcessing(renderer);
+    // const scenePass = pass(scene, camera);
+    // const scenePassColor = scenePass.getTextureNode('output');
+    //
+    // const bloomPass = bloom(scenePassColor);
+    // postProcessing.outputNode = scenePassColor.add(bloomPass);
 
     // Setup interactions
     const interactionManager = new InteractionManager(camera, renderer);
