@@ -16,11 +16,11 @@ export function animate(renderer, camera, scene, postProcessing, interactionMana
 
             updatePhysicSync();
         }
-            
         
         interactionManager.update();
         scene.traverse(obj => obj.update?.(delta));
         
-        postProcessing.render();
+        //postProcessing.render();
+        renderer.render(scene, camera);
     });
 }
