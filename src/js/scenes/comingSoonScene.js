@@ -57,10 +57,10 @@ function setupRoom() {
     // Load textures
     const texLoader = new THREE.TextureLoader();
     const textures = {
-        diffuse: texLoader.load('textures/concrete/concrete_layers_diff_2k.png'),
-        normal : texLoader.load('textures/concrete/concrete_layers_nor_gl_2k.png'),
-        arm : texLoader.load('textures/concrete/concrete_layers_arm_2k.png'),
-        displace : texLoader.load('textures/concrete/concrete_layers_disp_2k.png')
+        diffuse: texLoader.load('textures/concrete/concrete_layers_diff_2k.avif'),
+        normal : texLoader.load('textures/concrete/concrete_layers_nor_gl_2k.avif'),
+        arm : texLoader.load('textures/concrete/concrete_layers_arm_2k.avif'),
+        displace : texLoader.load('textures/concrete/concrete_layers_disp_2k.avif')
     };
 
     const textureValues = Object.values(textures);
@@ -126,7 +126,7 @@ function setupRoom() {
 }
 
 function createConcreteSlab(width, height, depth, textures) {
-    const geometry = new THREE.BoxGeometry(width, height, depth);
+    const geometry = new THREE.BoxGeometry(width, height, depth, 8, 8, 8);
     const material = new THREE.MeshStandardMaterial( {
         map: textures.diffuse,
         normalMap: textures.normal,
@@ -135,7 +135,7 @@ function createConcreteSlab(width, height, depth, textures) {
         metalnessMap: textures.arm,
         displacementMap: textures.displace,
         displacementBias: 0.01,
-        displacementScale: 0
+        displacementScale: .1
     });
     
     geometry.attributes.uv2 = geometry.attributes.uv;
