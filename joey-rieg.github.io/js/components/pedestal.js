@@ -1,4 +1,4 @@
-import * as THREE from "three/webgpu";
+import * as THREE from "three";
 
 export function createPedestal(position, color, glowColor, id) {
     // Pedestal base

@@ -1,4 +1,4 @@
-import * as THREE from "three/webgpu";
+import * as THREE from "three";
 
 export function createFloor() {
     const getPath = (texture) => `textures/concrete/Concrete-${texture}.jpg`;

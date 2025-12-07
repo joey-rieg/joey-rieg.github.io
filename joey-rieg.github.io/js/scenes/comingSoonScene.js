@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
 import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry";
 import {Flicker} from "../utils/flicker";
-import {GUI} from "three/examples/jsm/libs/lil-gui.module.min.js";
 import {palette} from "../utils/colorPalette";
 
 
@@ -58,10 +57,10 @@ function setupRoom() {
     // Load textures
     const texLoader = new THREE.TextureLoader();
     const textures = {
-        diffuse: texLoader.load('textures/concrete/concrete_layers_diff_2k.png'),
-        normal : texLoader.load('textures/concrete/concrete_layers_nor_gl_2k.png'),
-        arm : texLoader.load('textures/concrete/concrete_layers_arm_2k.png'),
-        displace : texLoader.load('textures/concrete/concrete_layers_disp_2k.png')
+        diffuse: texLoader.load('textures/concrete/concrete_layers_diff_2k.avif'),
+        normal : texLoader.load('textures/concrete/concrete_layers_nor_gl_2k.avif'),
+        arm : texLoader.load('textures/concrete/concrete_layers_arm_2k.avif'),
+        displace : texLoader.load('textures/concrete/concrete_layers_disp_2k.avif')
     };
 
     const textureValues = Object.values(textures);
@@ -162,7 +161,6 @@ function setupTypewriter(text, textColor) {
         // Set fixed Y and Z positions
         startTextPosition.y = finalTextCenterPoint.y;
         startTextPosition.z = finalTextCenterPoint.z;
-        console.log(`Length ${fullTextWidth} . Pos: ${startTextPosition.x}`)
 
         // Start the typewriter effect
         typeWriterEffect(text, textColor);
